@@ -29,48 +29,35 @@ void init(void);
 unsigned char compare[CHMAX];
 volatile unsigned char compbuff[CHMAX];
 
+//exponential values
+const char PW[] = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 27, 30, 33, 36, 39, 43, 47, 52, 56, 62, 67, 74, 81, 88, 96, 105, 115, 126, 137, 150, 164, 179, 196, 214, 234, 255};
+
 int r_val = 0x00;
-int g_val = 0x55;
-int b_val = 0xAA;
+int g_val = 0x00;
+int b_val = 0x00;
 
 int main(void) {
   init();
 
   int r_dir = 1;
-  int g_dir = 2;
-  int b_dir = 4;
+  int g_dir = 1;
+  int b_dir = 1;
 
-  for(;;) {
-    if (r_val > 254 - 1) {
-      r_dir = -1;
-    }
-    if (r_val < 1 + 1) {
-      r_dir = 1;
-    }
+  int i;
+  for(i=0;;i++) {
+    if(!(i % 11)) r_val += r_dir;
+    if(!(i % 13)) g_val += g_dir;
+    if(!(i % 17)) b_val += b_dir;
 
-    if (g_val > 254 - 3) {
-      g_dir = -3;
-    }
-    if (g_val < 1 + 3) {
-      g_dir = 3;
-    }
+    if(r_val == 0 || r_val == sizeof(PW)-1) r_dir *= -1;
+    if(g_val == 0 || g_val == sizeof(PW)-1) g_dir *= -1;
+    if(b_val == 0 || b_val == sizeof(PW)-1) b_dir *= -1;
 
-    if (b_val > 254 - 5) {
-      b_dir = -5;
-    }
-    if (b_val < 1 + 5) {
-      b_dir = 5;
-    }
+    compbuff[0] = PW[r_val] >> 1;
+    compbuff[1] = PW[g_val];
+    compbuff[2] = PW[b_val] >> 2;
 
-    r_val += r_dir;
-    g_val += g_dir;
-    b_val += b_dir;
-
-    compbuff[0] = r_val;
-    compbuff[1] = g_val;
-    compbuff[2] = b_val;
-
-    _delay_ms(100);
+    _delay_ms(10);
   }
 }
 
