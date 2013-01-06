@@ -53,9 +53,9 @@ int main(void) {
     if(g_val == 0 || g_val == sizeof(PW)-1) g_dir *= -1;
     if(b_val == 0 || b_val == sizeof(PW)-1) b_dir *= -1;
 
-    compbuff[0] = PW[r_val] * 0.61;
-    compbuff[1] = PW[g_val] * 1;
-    compbuff[2] = PW[b_val] * 0.2;
+    compbuff[0] = PW[r_val] >> 1;
+    compbuff[1] = PW[g_val];
+    compbuff[2] = PW[b_val] >> 2;
 
     _delay_ms(10);
   }
